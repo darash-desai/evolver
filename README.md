@@ -12,6 +12,15 @@ This project uses `venv` to manage the python environment. If you project direct
 python -m venv .venv
 ```
 
+Then activate the environment and install the project dependecies by running the following:
+
+```
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+VSCode should automatically activate the your Python environment going forward.
+
 ## Code Formatting
 
 This project uses Black as a code formatter. If you are using Visual Studio Code, install the [Black](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter) Python formatter extension.
