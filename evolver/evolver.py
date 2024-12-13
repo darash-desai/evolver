@@ -9,16 +9,14 @@ class Evolver:
 
     _instance = None
 
-    def __new__(singletonClass, serialPort="/dev/serial0", readTimeout=2) -> None:
+    def __new__(singletonClass, *args, **kwargs) -> None:
         if singletonClass._instance is None:
             logging.info("Creating eVOLVER singleton instance")
-            singletonClass._instance = super().__new__(
-                singletonClass, serialPort, readTimeout
-            )
+            singletonClass._instance = super().__new__(singletonClass, *args, **kwargs)
 
         return singletonClass._instance
 
-    def __init__(self, serialPort: str, readTimeout: float) -> None:
+    def __init__(self, serialPort="/dev/serial0", readTimeout=2.0) -> None:
         """
         Creates a new eVOLVER instances and connects to it.
 
