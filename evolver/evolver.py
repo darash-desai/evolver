@@ -7,6 +7,7 @@ class Evolver:
 
     _instance = None
     _serial = None
+    _serialInput = ""
 
     def __new__(singletonClass):
         if singletonClass._instance is None:
@@ -22,9 +23,22 @@ class Evolver:
         logging.info(f"Sending eVOLVER command: {command}")
         self._serial.write(command.encode())
         self._serial.flush()
-        response = self._serial.read(64).decode()
+
+        response = self.__readResponse()
         logging.info(f"Received response: {response}")
 
     def disconnect(self):
         logging.info("Closing eVOLVER connection")
         self._serial.close()
+
+    def __readResponse(self):
+        maxReadAttempts = 10
+        for _ in range(maxReadAttempts):
+            self._serialInput += self._serial.read_all().decode()
+            response, endSeq, remainder = self._serialInput.partition("end")
+            if endSeq != "":
+                self._serialInput = remainder
+                return f"{response}end"
+
+        logging.error(f"Received incomplete reponse: {self._serialInput}")
+        return ""
