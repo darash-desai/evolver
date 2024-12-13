@@ -18,7 +18,7 @@ class Evolver:
         logging.info("Creating eVOLVER singleton instance")
 
     def send(self, command):
-        logging.info("Sending eVOLVER command: ", command)
+        logging.info(f"Sending eVOLVER command: {command}")
 
     def disconnect(self):
         logging.info("Closing eVOLVER connection")
