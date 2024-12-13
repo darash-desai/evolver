@@ -20,7 +20,7 @@ class Evolver:
 
     def send(self, command):
         logging.info(f"Sending eVOLVER command: {command}")
-        self._serial.write(command)
+        self._serial.write(command.encode())
         response = self._serial.read_until(b"end")
         logging.info(f"Received response: {response}")
 
