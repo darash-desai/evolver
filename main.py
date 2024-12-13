@@ -12,12 +12,25 @@ def setup_logging():
 
 def main():
     """Main function for the application."""
-    logging.info("Started eVOLVER server.")
+    logging.info("Starting eVOLVER system.")
 
-    # TODO: Create server instance
     evolver = Evolver()
 
-    logging.info("eVOLVER server closed.")
+    print("Command options:")
+    print("\t- exit: Disconnect from the eVOLVER")
+    print("\t- command [command]: Send [command] to the eVOLVER")
+
+    userInput = ""
+    while userInput != "exit":
+        userInput = input(">")
+        print("Accepted input", userInput)
+
+        if userInput.startswith("command"):
+            command = userInput.replace("command ", "").strip()
+            evolver.send(command)
+
+    evolver.disconnect()
+    logging.info("eVOLVER system stopped.")
 
 
 if __name__ == "__main__":
