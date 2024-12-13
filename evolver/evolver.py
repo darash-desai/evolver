@@ -1,6 +1,8 @@
 import logging
 import serial
 
+from time import time
+
 
 class Evolver:
     """Singleton class for the eVOLVER control software."""
@@ -8,6 +10,7 @@ class Evolver:
     _instance = None
     _serial = None
     _serialInput = ""
+    _readTimeout = 2
 
     def __new__(singletonClass):
         if singletonClass._instance is None:
@@ -32,13 +35,13 @@ class Evolver:
         self._serial.close()
 
     def __readResponse(self):
-        maxReadAttempts = 10
-        for _ in range(maxReadAttempts):
+        endTime = time() + self._readTimeout
+        while time() < endTime:
             self._serialInput += self._serial.read_all().decode()
             response, endSeq, remainder = self._serialInput.partition("end")
             if endSeq != "":
                 self._serialInput = remainder
                 return f"{response}end"
 
-        logging.error(f"Received incomplete reponse: {self._serialInput}")
+        logging.error(f"Received incomplete response: {self._serialInput}")
         return ""
