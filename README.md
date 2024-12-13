@@ -21,6 +21,14 @@ pip install -r requirements.txt
 
 VSCode should automatically activate the your Python environment going forward.
 
+## Starting eVOLVER
+
+To start the eVOLVER system, run:
+
+```
+python main.py
+```
+
 ## Code Formatting
 
 This project uses Black as a code formatter. If you are using Visual Studio Code, install the [Black](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter) Python formatter extension.
