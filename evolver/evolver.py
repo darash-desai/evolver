@@ -21,7 +21,8 @@ class Evolver:
     def send(self, command):
         logging.info(f"Sending eVOLVER command: {command}")
         self._serial.write(command.encode())
-        response = self._serial.read_until(b"end").decode()
+        self._serial.flush()
+        response = self._serial.read(64).decode()
         logging.info(f"Received response: {response}")
 
     def disconnect(self):
