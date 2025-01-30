@@ -1,0 +1,15 @@
+experiment:
+  vials: 1-12 # which vials this experiment pertains to
+  stages:
+    - name: Chemostat
+      temperature: 37 # in celsuis
+      stir: 8 # 1-10
+      od: 2 # readings per minute
+      pump:
+        flow: 5 # flow rate in mL/min
+        triggerOn:
+          od: 2.05 # od that triggers pump to turn on
+        triggerOff:
+          od: 1.95 # od that triggers pump to turn off
+      end:
+        time: 1440 # maximum time in minutes
