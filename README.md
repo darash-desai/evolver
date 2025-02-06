@@ -42,19 +42,23 @@ The eVOLVER system leverages the YAML syntax to define and execute protocols on 
 Below you will find an outline of the YAML specification for an experiment followed by detailed documentation for each item.
 
 - [experiment](#experiment)
-  - [experiment.vials](#experiment-vials)
-  - [experiment.stages](#experiment.stages)
-    - [experiment.{stage}.name](#experiment.{stage}.name)
-    - [experiment.{stage}.end](#experiment.{stage}.end)
-      - [experiment.{stage}.end.temperature]()
-      - [experiment.{stage}.end.od]()
-      - [experiment.{stage}.end.time]()
+  - [experiment.vials]()
+  - [experiment.stages]()
+    - [experiment.{stage}.name]()
+    - [experiment.{stage}.end]()
+      - [experiment.{stage}.end.triggers]()
       - [experiment.{stage}.end.mode]()
       - [experiment.{stage}.end.delay]()
     - [experiment.{stage}.od]()
     - [experiment.{stage}.temperature]()
+      - [experiment.{stage}.temperature.default]()
+      - [experiment.{stage}.temperature.triggers]()
     - [experiment.{stage}.stir]()
+      - [experiment.{stage}.stir.default]()
+      - [experiment.{stage}.stir.triggers]()
     - [experiment.{stage}.pump]()
+      - [experiment.{stage}.pump.default]()
+      - [experiment.{stage}.pump.triggers]()
 
 ## `experiment`
 
@@ -106,12 +110,16 @@ experiment:
   stages:
     - name: Ambient
       end:
-        time: 1440
+        triggers:
+          - property: time
+            trigger: 1440
 
     - name: In-vivo
       temperature: 37
       end:
-        time: 1440
+        triggers:
+          - property: time
+            trigger: 1440
 ```
 
 ## `experiment.{stage}.name`
@@ -120,11 +128,11 @@ Specifies the name of the stage.
 
 ## `experiment.{stage}.end`
 
-Object specifying the end condition(s) for the stage for a given vial. End conditions can be triggered based on OD, time, or temperature. Multiple triggers can be defined and assessed as either an OR (default) or AND condition.
+Object specifying the end condition(s) for the stage for a given vial. End conditions are based on trigger objects, where multile triggers will be assessed as either an OR (default) or AND condition.
 
-### Example
+### Example: End after Duration
 
-The following example defines and end conditon that is triggered by either 1) a plateau of the OD at a value of OD 2 over 10 min with a tolerance of ±OD 0.1, or 2) a time of 24 hrs for a given vial. Once either of these conditions are triggered, a delay of 10 min is added before the stage is terminated.
+Ends the stage after a time of 1440 min (24 hrs).
 
 ```
 experiment:
@@ -133,19 +141,12 @@ experiment:
     - name: Growth
       temperature: 37
       end:
-        od:
-          value: 2
-          tolerance: 0.1
-          duration: 10
-        delay: 10
-        time: 1440
+        triggers:
+          - property: time
+            trigger: 1440
 ```
 
-## `experiment.{stage}.end.temperature`
-
-Specifies an end trigger based on temperature readings. The property supports values of either a single scalar value or an object defining a plateau. All values are interpreted in degrees celcius.
-
-### Example: Scalar Threshold
+### Example: End at Temperature Threshold
 
 Ends the stage when the temperature in the vial crosses a threshold of 37°C. The threshold is valid whether the temperature is rising or falling.
 
@@ -156,33 +157,14 @@ experiment:
     - name: Growth
       temperature: 37
       end:
-        temperature: 37
+        triggers:
+          - property: temperature
+            trigger: 37
 ```
 
-### Example: Plateau
+### Example: End at OD Plateau with Timeout
 
-Ends the stage when the temperature reaches a plateua defined by readings of 37 ± 0.5°C over 5 min.
-
-```
-experiment:
-  vials: 1-12
-  stages:
-    - name: Growth
-      temperature: 37
-      end:
-        temperature:
-          value: 37
-          tolerance: 0.5
-          duration: 10
-```
-
-## `experiment.{stage}.end.od`
-
-Specifies an end trigger based on OD readings. The property supports values of either a single scalar value or an object defining a plateau. All values are interpreted in OD units.
-
-### Example: Scalar Threshold
-
-Ends the stage when the OD in the vial crosses a threshold of OD 2. The threshold is valid whether the OD is rising or falling.
+The following example defines and end conditon that is triggered by either 1) a plateau of the OD at a value of OD 2 ± 0.1 over 10 min, or 2) a time of 24 hrs for a given vial. Once either of these conditions are triggered, a delay of 10 min is added before the stage is terminated for the vial.
 
 ```
 experiment:
@@ -191,43 +173,20 @@ experiment:
     - name: Growth
       temperature: 37
       end:
-        od: 2
+        triggers:
+          - property: od
+            trigger:
+              value: 2
+              tolerance: 0.1
+              duration 10
+          - property: time
+            trigger: 1440
+        delay: 10
 ```
 
-### Example: Plateau
+## `experiment.{stage}.end.triggers`
 
-Ends the stage when the OD reaches a plateua defined by readings of OD 2 ± 0.1 over 10 min.
-
-```
-experiment:
-  vials: 1-12
-  stages:
-    - name: Growth
-      temperature: 37
-      end:
-        od:
-          value: 2
-          tolerance: 0.1
-          duration: 10
-```
-
-## `experiment.{stage}.end.time`
-
-Specifies a maximum time trigger to end the stage in minutes.
-
-### Example
-
-Ends the stage after a time of 1440 min or 24 hrs.
-
-```
-experiment:
-  vials: 1-12
-  stages:
-    - name: Growth
-      temperature: 37
-      end:
-        time: 1440
-```
+The array of triggers to consider for the end condition. See #triggers for more information.
 
 ## `experiment.{stage}.end.mode`
 
@@ -236,7 +195,7 @@ Specifies whether multiple trigger conditions should be assessed as an AND condi
 - `and`
 - `or`
 
-The default behavior for evaluating trigger conditions is OR if this property is not explicitely set.
+If this property is not explicitely set, he default behavior for evaluating trigger conditions is OR.
 
 ### Example
 
@@ -249,8 +208,11 @@ experiment:
     - name: Growth
       temperature: 37
       end:
-        od: 1.5
-        time: 30
+        triggers:
+          - proerty: od
+            trigger: 1.5
+          - property: time
+            trigger: 30
         mode: and
 ```
 
@@ -264,7 +226,7 @@ Scalar value to define the frequency that OD measurements for the vial should be
 
 ### Example
 
-Takes 12 OD readings per meinute.
+Takes 12 OD readings per minute.
 
 ```
 experiment:
@@ -274,12 +236,14 @@ experiment:
       temperature: 37
       od: 12
       end:
-        time: 1440
+        triggers:
+          - property: time
+            trigger: 1440
 ```
 
 ## `experiment.{stage}.temperature`
 
-Specifies the temperature setpoint for the vial in degrees celcius. The eVOLVER employs a PID feedback control loop to reach this setpoint. This property can either take a scalar value or an object that specifies additional on/off triggers.
+Specifies the temperature setpoint for the vial in degrees celcius. The eVOLVER employs a PID feedback control loop to reach this setpoint. This property can either take a scalar value or on object that specifies an array of triggers (see #triggers) and an optional default value for when the stage starts.
 
 ### Example: Constant scalar setpoint
 
@@ -292,7 +256,9 @@ experiment:
     - name: Growth
       temperature: 37
       end:
-        time: 1440
+        triggers:
+          - property: time
+            trigger: 1440
 ```
 
 ## `experiment.{stage}.temperature.default`
@@ -301,82 +267,11 @@ Sets the default temperature for the start of the procedure.
 
 ## `experiment.{stage}.temperature.triggers`
 
-Specifies an array of triggers to modify the temperature setpoint. Triggers are
-universal to all eVOLVER parameters and can be set based on thresholds for OD,
-temperature, and time.
-
-### Example: Toggle temperature based on OD thresholds
-
-```
-experiment:
-  vials: 1-12
-  stages:
-    - name: Growth
-      temperature:
-        default: 37
-        triggers:
-          - property: od
-            trigger: 2
-            value: 15
-          - property: od
-            trigger: 1
-            value: 30
-            skip: 1
-      end:
-        time: 1440
-```
-
-### Example: Toggle temperature based on OD plateaus
-
-```
-experiment:
-  vials: 1-12
-  stages:
-    - name: Growth
-      temperature:
-        default: 37
-        triggers:
-          - property: od
-            trigger:
-              value: 2
-              tolerance: 0.1
-              duration: 5
-            value: 15
-          - property: od
-            trigger: 1
-              value: 1
-              tolerance: 0.1
-              duration: 5
-            value: 30
-            skip: 1
-      end:
-        time: 1440
-```
-
-## `experiment.{stage}.temperature.{trigger}.property`
-
-The propery that the trigger watches. Ths can be either temperature, od, or time.
-
-## `experiment.{stage}.temperature.{trigger}.trigger`
-
-A scalar or object value that describes when the trigger condition for the property
-that is being watched. A scalar value describes a specific value threshold (see above, Example: Toggle temperature based on OD thresholds) An object value specifies a plateau condition for the property value.
-
-## `experiment.{stage}.temperature.{trigger}.trigger.value`
-
-The nominal value for the property, in relevant units for the property.
-
-## `experiment.{stage}.temperature.{trigger}.trigger.tolerance`
-
-The tolerance (±) for the property value, in relevant units for the property.
-
-## `experiment.{stage}.temperature.{trigger}.trigger.duration`
-
-The duration on time over which the value ± tolerance condition should be met.
+The array of trigger objects for modulating the temperature. See #triggers for more information.
 
 ## `experiment.{stage}.stir`
 
-Scalar value to set the stir bar intensity of the vial. Valid values range from 0-10, inclusive. A value of 0 keeps the stir bar off.
+Scalar value or on object that specifies an array of triggers (see #triggers) and an optional default value for when the stage starts. Valid values range from 0-10, inclusive. A value of 0 keeps the stir bar off.
 
 ### Example
 
@@ -393,10 +288,67 @@ experiment:
         time: 1440
 ```
 
+## `experiment.{stage}.stir.default`
+
+Scalar value that sets the default stir bar intensity for the start of the procedure.
+
+## `experiment.{stage}.stir.triggers`
+
+The array of trigger objects for modulating the stir bar intensity. See #triggers for more information.
+
+## `experiment.{stage}.pump`
+
+Object that specifies operating conditions for the pump.
+
+### Example
+
+Turn on channels 1 and 2 of the pump to a rate of 10 mL/hr when the experiment starts.
+
+```
+experiment:
+  vials: 1-12
+  stages:
+    - name: Growth
+      temperature: 37
+      stir: 5
+      pump:
+        default:
+          channel: 1,2
+          rate: 10
+          volume: 0
+      end:
+        triggers:
+          - property: time
+            trigger: 1440
+```
+
+## `experiment.{stage}.pump.default`
+
+Sets the default pump operating donditions for the start of the procedure.
+
+## `experiment.{stage}.pump.default.channel`
+
+Comma-separated list of which channels the instruction applies to. Valid values are:
+
+- `1`
+- `2`
+- `1,2`
+
+## `experiment.{stage}.pump.default.rate`
+
+The average flow rate the pump should run at in mL/hr. A rate of `0` turns the pump(s) off.
+
+## `experiment.{stage}.pump.default.volume`
+
+The total volume the pump should dispense before turning off in mL. A value of `0` leaves the pump on indefinitely.
+
+## `experiment.{stage}.pump.triggers`
+
+The array of trigger objects for modulating the pump conditions. See #triggers for more information.
+
 ## Triggers
 
-The eVOLVER experimental protocol is based on an event-driven model
-specified by triggers that modify system parameters. Below you will find an outline of the YAML specification for a trigger object followed by detail documentation for each item.
+The eVOLVER experimental protocol is executed based on an event-driven model specified by triggers that modify system parameters. Below you will find an outline of the YAML specification for a trigger object followed by detail documentation for each item.
 
 - [trigger](#trigger)
   - [trigger.property](#trigger)
@@ -404,6 +356,108 @@ specified by triggers that modify system parameters. Below you will find an outl
     - [trigger.trigger.value](#trigger)
     - [trigger.trigger.tolerance](#trigger)
     - [trigger.trigger.duration](#trigger)
+  - [trigger.value](#trigger)
   - [trigger.skip](#trigger)
 
 ## `trigger`
+
+Object that specifies the trigger property to watch, property value that sets off a trigger, as well as other optional parameters such as trigger skipping.
+
+## `trigger.property`
+
+Defines the property that will be watched for this trigger. Valid values include:
+
+- `od`
+- `temperature`
+- `time`
+- `trigger`
+
+The `trigger` value is used to construct a trigger that fires a specified duration after the last trigger that was fired.
+
+## `trigger.trigger`
+
+Scalar that specifies the setpoint value that fires the trigger or object defining plateau conditions. Values should be provided in units that are relevant to the trigger property:
+
+- `od`: OD
+- `temperature`: °C
+- `time`: min
+- `trigger`: min
+
+## Example: Temperature Trigger with Scalar Setpoint
+
+Defines a trigger that is fired when the temperature reaches crosses 30°C.
+
+```
+- property: temperature
+  trigger: 30
+```
+
+## Example: Plateau-based Temperature Trigger
+
+Defines a trigger that is fired when the temperature plateaus to 37 ± 0.5°C over 10 min.
+
+```
+- property: temperature
+  trigger:
+    value: 37
+    tolerance: 0.5
+    duration: 10
+```
+
+## `trigger.trigger.value`
+
+Defines the nominal value for a plateau in units relevant for the trigger property.
+
+## `trigger.trigger.tolerance`
+
+The tolerance (±) around the nominal value that still satisfies a plateau. Units should match those used for the nominal value.
+
+## `trigger.trigger.duration`
+
+The duration of time over which the value ± tolerance condition should be met to be considered a plateau.
+
+## `trigger.value`
+
+Defines the new parameter value that should be set when this trigger is fired. This is relevant when the trigger is being applied to property such as the eVOLVER pump. The shape of this value should match `default` on the property the trigger is being added to.
+
+## Example: Trigger Pump Based on OD
+
+Defines a set of triggers attached to a pump object that turn on the pump undefinitely at a rate of 30 mL/hr for channels 1 and 2 when the OD reaches 2.05; and, turns the pump off for both channels when the OD reaches 1.95.
+
+```
+pump:
+  - triggers:
+    - property: od
+      trigger: 2.05
+      value:
+        channel: 1,2
+        rate: 30
+        volume: 0
+    - property: od
+      trigger: 1.95
+      value:
+        channel: 1,2
+        rate: 0
+        volume: 0
+```
+
+### Example: Toggle Temperature based on OD
+
+Adds triggers to the temperature property, setting it to 15°C when the OD cross OD 2 and to 30°C when it crosses OD 1.
+
+```
+temperature:
+  default: 37
+  triggers:
+    - property: od
+      trigger: 2
+      value: 15
+    - property: od
+      trigger: 1
+      value: 30
+      skip: 1
+```
+
+## `trigger.skip`
+
+A comma-separated list of trigger instances that should be skipped. For instance, a value of `1` would not fire the trigger the first time the trigger conditions are met. A value of `1,3` would skip the first and third time the trigger conditions are met.
