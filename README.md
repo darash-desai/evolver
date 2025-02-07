@@ -336,7 +336,7 @@ Comma-separated list of which channels the instruction applies to. Valid values 
 
 ## `experiment.{stage}.pump.default.rate`
 
-The average flow rate the pump should run at in mL/hr. A rate of `0` turns the pump(s) off.
+The average flow rate the pump should run at in mL/hr. A rate of `0` turns the pump(s) off. The eVOLVER system pumps operate at a fixed flow rate of 1 mL/min, which represents the maximum allowable flow rate. Slower flow rates are approximatated by pumping small boluses of liquid at regular intervals.
 
 ## `experiment.{stage}.pump.default.volume`
 
