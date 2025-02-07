@@ -9,18 +9,18 @@ experiment:
         triggers:
           # Trigger channel 1 to turn on when the OD reaches 2.05
           - property: od
-            trigger: 2.05
+            criteria: 2.05
             value:
               channel: 1
               rate: 30
 
           # Trigger channel 1 to turn off when the OD reaches 1.95
           - property: od
-            trigger: 1.95
+            criteria: 1.95
             value:
               channel: 1
               rate: 0
       end:
         triggers:
           property: time
-          trigger: 1440 # maximum time in minutes
+          criteria: 1440 # maximum time in minutes

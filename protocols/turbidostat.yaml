@@ -8,16 +8,16 @@ experiment:
       pump:
         triggers:
           - property: od
-            trigger: 2.05
+            criteria: 2.05
             value:
               channel: 1
               rate: 30 # flow rate in mL/hr
           - property: od
-            trigger: 0.95
+            criteria: 0.95
             value:
               channel: 1
               rate: 0
       end:
         triggers:
           property: time
-          trigger: 1440 # maximum time in minutes
+          criteria: 1440 # maximum time in minutes

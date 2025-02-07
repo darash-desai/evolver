@@ -8,9 +8,9 @@ experiment:
       end:
         triggers:
           - property: od
-            trigger:
+            criteria:
               tolerance: 0.1 # acceptable variance in OD readings within a plateau
               duration: 10 # time average period to measure plateau
           - property: time
-            trigger: 1440 # maximum time in minutes
+            criteria: 1440 # maximum time in minutes
         delay: 10 # delay period in minutes after the trigger

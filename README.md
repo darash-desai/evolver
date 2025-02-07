@@ -42,23 +42,26 @@ The eVOLVER system leverages the YAML syntax to define and execute protocols on 
 Below you will find an outline of the YAML specification for an experiment followed by detailed documentation for each item.
 
 - [experiment](#experiment)
-  - [experiment.vials]()
-  - [experiment.stages]()
-    - [experiment.{stage}.name]()
-    - [experiment.{stage}.end]()
-      - [experiment.{stage}.end.triggers]()
-      - [experiment.{stage}.end.mode]()
-      - [experiment.{stage}.end.delay]()
-    - [experiment.{stage}.od]()
-    - [experiment.{stage}.temperature]()
-      - [experiment.{stage}.temperature.default]()
-      - [experiment.{stage}.temperature.triggers]()
-    - [experiment.{stage}.stir]()
-      - [experiment.{stage}.stir.default]()
-      - [experiment.{stage}.stir.triggers]()
-    - [experiment.{stage}.pump]()
-      - [experiment.{stage}.pump.default]()
-      - [experiment.{stage}.pump.triggers]()
+  - [experiment.vials](#experimentvials)
+  - [experiment.stages](#experimentstages)
+    - [experiment.{stage}.name](#experimentstagename)
+    - [experiment.{stage}.end](#experimentstageend)
+      - [experiment.{stage}.end.triggers](#experimentstageendtriggers)
+      - [experiment.{stage}.end.mode](#experimentstageendmode)
+      - [experiment.{stage}.end.delay](#experimentstageenddelay)
+    - [experiment.{stage}.od](#experimentstageod)
+    - [experiment.{stage}.temperature](#experimentstagetemperature)
+      - [experiment.{stage}.temperature.default](#experimentstagetemperaturedefault)
+      - [experiment.{stage}.temperature.triggers](#experimentstagetemperaturetriggers)
+    - [experiment.{stage}.stir](#experimentstagestir)
+      - [experiment.{stage}.stir.default](#experimentstagestirdefault)
+      - [experiment.{stage}.stir.triggers](#experimentstagestirtriggers)
+    - [experiment.{stage}.pump](#experimentstagepump)
+      - [experiment.{stage}.pump.default](#experimentstagepumpdefault)
+        - [experiment.{stage}.pump.default.channel](#experimentstagepumpdefaultchannel)
+        - [experiment.{stage}.pump.default.rate](#experimentstagepumpdefaultrate)
+        - [experiment.{stage}.pump.default.volume](#experimentstagepumpdefaultvolume)
+      - [experiment.{stage}.pump.triggers](#experimentstagepumptriggers)
 
 ## `experiment`
 
@@ -351,13 +354,13 @@ The array of trigger objects for modulating the pump conditions. See #triggers f
 The eVOLVER experimental protocol is executed based on an event-driven model specified by triggers that modify system parameters. Below you will find an outline of the YAML specification for a trigger object followed by detail documentation for each item.
 
 - [trigger](#trigger)
-  - [trigger.property](#trigger)
-  - [trigger.trigger](#trigger)
-    - [trigger.trigger.value](#trigger)
-    - [trigger.trigger.tolerance](#trigger)
-    - [trigger.trigger.duration](#trigger)
-  - [trigger.value](#trigger)
-  - [trigger.skip](#trigger)
+  - [trigger.property](#triggerproperty)
+  - [trigger.criteria](#triggertrigger)
+    - [trigger.criteria.value](#triggertriggervalue)
+    - [trigger.criteria.tolerance](#triggertriggertolerance)
+    - [trigger.criteria.duration](#triggertriggerduration)
+  - [trigger.value](#triggervalue)
+  - [trigger.skip](#triggerskip)
 
 ## `trigger`
 
@@ -374,9 +377,9 @@ Defines the property that will be watched for this trigger. Valid values include
 
 The `trigger` value is used to construct a trigger that fires a specified duration after the last trigger that was fired.
 
-## `trigger.trigger`
+## `trigger.criteria`
 
-Scalar that specifies the setpoint value that fires the trigger or object defining plateau conditions. Values should be provided in units that are relevant to the trigger property:
+Scalar that specifies the setpoint value that fires the trigger; or, object defining plateau conditions. Values should be provided in units that are relevant to the trigger property:
 
 - `od`: OD
 - `temperature`: °C
@@ -389,7 +392,7 @@ Defines a trigger that is fired when the temperature reaches crosses 30°C.
 
 ```
 - property: temperature
-  trigger: 30
+  criteria: 30
 ```
 
 ## Example: Plateau-based Temperature Trigger
@@ -404,15 +407,15 @@ Defines a trigger that is fired when the temperature plateaus to 37 ± 0.5°C ov
     duration: 10
 ```
 
-## `trigger.trigger.value`
+## `trigger.criteria.value`
 
 Defines the nominal value for a plateau in units relevant for the trigger property. If this property is omitted, the plateau is condition is based on the time averaged value over the specified duration.
 
-## `trigger.trigger.tolerance`
+## `trigger.criteria.tolerance`
 
 The tolerance (±) around the nominal value that still satisfies a plateau. Units should match those used for the nominal value.
 
-## `trigger.trigger.duration`
+## `trigger.criteria.duration`
 
 The duration of time over which the value ± tolerance condition should be met to be considered a plateau.
 
@@ -428,13 +431,13 @@ Defines a set of triggers attached to a pump object that turn on the pump undefi
 pump:
   - triggers:
     - property: od
-      trigger: 2.05
+      criteria: 2.05
       value:
         channel: 1,2
         rate: 30
         volume: 0
     - property: od
-      trigger: 1.95
+      criteria: 1.95
       value:
         channel: 1,2
         rate: 0
@@ -450,10 +453,10 @@ temperature:
   default: 37
   triggers:
     - property: od
-      trigger: 2
+      criteria: 2
       value: 15
     - property: od
-      trigger: 1
+      criteria: 1
       value: 30
       skip: 1
 ```
