@@ -340,7 +340,7 @@ The average flow rate the pump should run at in mL/hr. A rate of `0` turns the p
 
 ## `experiment.{stage}.pump.default.volume`
 
-The total volume the pump should dispense before turning off in mL. A value of `0` leaves the pump on indefinitely.
+The total volume the pump should dispense before turning off in mL. A value of `0` leaves the pump on indefinitely. If this property is omitted, it is assumed to be 0.
 
 ## `experiment.{stage}.pump.triggers`
 
@@ -406,7 +406,7 @@ Defines a trigger that is fired when the temperature plateaus to 37 ± 0.5°C ov
 
 ## `trigger.trigger.value`
 
-Defines the nominal value for a plateau in units relevant for the trigger property.
+Defines the nominal value for a plateau in units relevant for the trigger property. If this property is omitted, the plateau is condition is based on the time averaged value over the specified duration.
 
 ## `trigger.trigger.tolerance`
 
