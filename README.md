@@ -115,14 +115,14 @@ experiment:
       end:
         triggers:
           - property: time
-            trigger: 1440
+            criteria: 1440
 
     - name: In-vivo
       temperature: 37
       end:
         triggers:
           - property: time
-            trigger: 1440
+            criteria: 1440
 ```
 
 ## `experiment.{stage}.name`
@@ -146,7 +146,7 @@ experiment:
       end:
         triggers:
           - property: time
-            trigger: 1440
+            criteria: 1440
 ```
 
 ### Example: End at Temperature Threshold
@@ -162,7 +162,7 @@ experiment:
       end:
         triggers:
           - property: temperature
-            trigger: 37
+            criteria: 37
 ```
 
 ### Example: End at OD Plateau with Timeout
@@ -178,12 +178,12 @@ experiment:
       end:
         triggers:
           - property: od
-            trigger:
+            criteria:
               value: 2
               tolerance: 0.1
               duration 10
           - property: time
-            trigger: 1440
+            criteria: 1440
         delay: 10
 ```
 
@@ -213,9 +213,9 @@ experiment:
       end:
         triggers:
           - proerty: od
-            trigger: 1.5
+            criteria: 1.5
           - property: time
-            trigger: 30
+            criteria: 30
         mode: and
 ```
 
@@ -241,7 +241,7 @@ experiment:
       end:
         triggers:
           - property: time
-            trigger: 1440
+            criteria: 1440
 ```
 
 ## `experiment.{stage}.temperature`
@@ -261,7 +261,7 @@ experiment:
       end:
         triggers:
           - property: time
-            trigger: 1440
+            criteria: 1440
 ```
 
 ## `experiment.{stage}.temperature.default`
@@ -288,7 +288,9 @@ experiment:
       temperature: 37
       stir: 5
       end:
-        time: 1440
+        triggers:
+          property: time
+          criteria: 1440
 ```
 
 ## `experiment.{stage}.stir.default`
@@ -322,7 +324,7 @@ experiment:
       end:
         triggers:
           - property: time
-            trigger: 1440
+            criteria: 1440
 ```
 
 ## `experiment.{stage}.pump.default`
