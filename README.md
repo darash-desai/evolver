@@ -41,7 +41,7 @@ The eVOLVER system leverages the YAML syntax to define and execute protocols on 
 
 Below you will find an outline of the YAML specification for an experiment followed by detailed documentation for each item.
 
-- [experiment](#experiment)
+- [experiment](#experiment-1)
   - [experiment.vials](#experimentvials)
   - [experiment.stages](#experimentstages)
     - [experiment.{stage}.name](#experimentstagename)
@@ -295,15 +295,15 @@ experiment:
 
 ## `experiment.{stage}.stir.default`
 
-Scalar value that sets the default stir bar intensity for the start of the procedure.
+Scalar value that sets the default stir bar intensity for the start of the procedure. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.stir.triggers`
 
-The array of trigger objects for modulating the stir bar intensity. See #triggers for more information.
+The array of trigger objects for modulating the stir bar intensity. See #triggers for more information. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.pump`
 
-Object that specifies operating conditions for the pump.
+Object that specifies operating conditions for the pump. <br />[[back to top]](#experiment)
 
 ### Example
 
@@ -329,7 +329,7 @@ experiment:
 
 ## `experiment.{stage}.pump.default`
 
-Sets the default pump operating donditions for the start of the procedure.
+Sets the default pump operating donditions for the start of the procedure. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.pump.default.channel`
 
@@ -339,17 +339,19 @@ Comma-separated list of which channels the instruction applies to. Valid values 
 - `2`
 - `1,2`
 
+[[back to top]](#experiment)
+
 ## `experiment.{stage}.pump.default.rate`
 
-The average flow rate the pump should run at in mL/hr. A rate of `0` turns the pump(s) off. The eVOLVER system pumps operate at a fixed flow rate of 1 mL/min, which represents the maximum allowable flow rate. Slower flow rates are approximatated by pumping small boluses of liquid at regular intervals.
+The average flow rate the pump should run at in mL/hr. A rate of `0` turns the pump(s) off. The eVOLVER system pumps operate at a fixed flow rate of 1 mL/min, which represents the maximum allowable flow rate. Slower flow rates are approximatated by pumping small boluses of liquid at regular intervals. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.pump.default.volume`
 
-The total volume the pump should dispense before turning off in mL. A value of `0` leaves the pump on indefinitely. If this property is omitted, it is assumed to be 0.
+The total volume the pump should dispense before turning off in mL. A value of `0` leaves the pump on indefinitely. If this property is omitted, it is assumed to be 0. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.pump.triggers`
 
-The array of trigger objects for modulating the pump conditions. See #triggers for more information.
+The array of trigger objects for modulating the pump conditions. See #triggers for more information.<br />[[back to top]](#experiment)
 
 ## Triggers
 
@@ -366,7 +368,7 @@ The eVOLVER experimental protocol is executed based on an event-driven model spe
 
 ## `trigger`
 
-Object that specifies the trigger property to watch, property value that sets off a trigger, as well as other optional parameters such as trigger skipping.
+Object that specifies the trigger property to watch, property value that sets off a trigger, as well as other optional parameters such as trigger skipping. <br />[[back to top]](#triggers)
 
 ## `trigger.property`
 
@@ -377,7 +379,7 @@ Defines the property that will be watched for this trigger. Valid values include
 - `time`
 - `trigger`
 
-The `trigger` value is used to construct a trigger that fires a specified duration after the last trigger that was fired.
+The `trigger` value is used to construct a trigger that fires a specified duration after the last trigger that was fired. <br />[[back to top]](#triggers)
 
 ## `trigger.criteria`
 
@@ -387,6 +389,8 @@ Scalar that specifies the setpoint value that fires the trigger; or, object defi
 - `temperature`: °C
 - `time`: min
 - `trigger`: min
+
+[[back to top]](#triggers)
 
 ## Example: Temperature Trigger with Scalar Setpoint
 
@@ -411,19 +415,19 @@ Defines a trigger that is fired when the temperature plateaus to 37 ± 0.5°C ov
 
 ## `trigger.criteria.value`
 
-Defines the nominal value for a plateau in units relevant for the trigger property. If this property is omitted, the plateau is condition is based on the time averaged value over the specified duration.
+Defines the nominal value for a plateau in units relevant for the trigger property. If this property is omitted, the plateau is condition is based on the time averaged value over the specified duration. <br />[[back to top]](#triggers)
 
 ## `trigger.criteria.tolerance`
 
-The tolerance (±) around the nominal value that still satisfies a plateau. Units should match those used for the nominal value.
+The tolerance (±) around the nominal value that still satisfies a plateau. Units should match those used for the nominal value. <br />[[back to top]](#triggers)
 
 ## `trigger.criteria.duration`
 
-The duration of time over which the value ± tolerance condition should be met to be considered a plateau.
+The duration of time over which the value ± tolerance condition should be met to be considered a plateau. <br />[[back to top]](#triggers)
 
 ## `trigger.value`
 
-Defines the new parameter value that should be set when this trigger is fired. This is relevant when the trigger is being applied to property such as the eVOLVER pump. The shape of this value should match `default` on the property the trigger is being added to.
+Defines the new parameter value that should be set when this trigger is fired. This is relevant when the trigger is being applied to property such as the eVOLVER pump. The shape of this value should match `default` on the property the trigger is being added to. <br />[[back to top]](#triggers)
 
 ## Example: Trigger Pump Based on OD
 
@@ -465,4 +469,4 @@ temperature:
 
 ## `trigger.skip`
 
-A comma-separated list of trigger instances that should be skipped. For instance, a value of `1` would not fire the trigger the first time the trigger conditions are met. A value of `1,3` would skip the first and third time the trigger conditions are met.
+A comma-separated list of trigger instances that should be skipped. For instance, a value of `1` would not fire the trigger the first time the trigger conditions are met. A value of `1,3` would skip the first and third time the trigger conditions are met. <br />[[back to top]](#triggers)
