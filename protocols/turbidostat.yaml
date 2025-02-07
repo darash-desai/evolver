@@ -1,0 +1,23 @@
+experiment:
+  vials: 1-12 # which vials this experiment pertains to
+  stages:
+    - name: Turbidostat
+      temperature: 37 # in celsuis
+      stir: 8 # 1-10
+      od: 6 # readings per minute
+      pump:
+        triggers:
+          - property: od
+            criteria: 2.05
+            value:
+              channel: 1
+              rate: 30 # flow rate in mL/hr
+          - property: od
+            criteria: 0.95
+            value:
+              channel: 1
+              rate: 0
+      end:
+        triggers:
+          property: time
+          criteria: 1440 # maximum time in minutes

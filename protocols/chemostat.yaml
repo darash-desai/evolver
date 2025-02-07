@@ -1,0 +1,26 @@
+experiment:
+  vials: 1-12 # which vials this experiment pertains to
+  stages:
+    - name: Chemostat
+      temperature: 37 # in celsuis
+      stir: 8 # 1-10
+      od: 2 # readings per minute
+      pump:
+        triggers:
+          # Trigger channel 1 to turn on when the OD reaches 2.05
+          - property: od
+            criteria: 2.05
+            value:
+              channel: 1
+              rate: 30
+
+          # Trigger channel 1 to turn off when the OD reaches 1.95
+          - property: od
+            criteria: 1.95
+            value:
+              channel: 1
+              rate: 0
+      end:
+        triggers:
+          property: time
+          criteria: 1440 # maximum time in minutes
