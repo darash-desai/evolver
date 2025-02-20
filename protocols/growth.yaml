@@ -1,0 +1,16 @@
+experiment:
+  vials: 1-12 # which vials this experiment pertains to
+  stages:
+    - name: Growth        
+      temperature: 37 # in celsuis
+      stir: 8 # 1-10
+      od: 2 # readings per minute
+      end:
+        triggers:
+          - property: od
+            criteria:
+              tolerance: 0.1 # acceptable variance in OD readings within a plateau
+              duration: 10 # time average period to measure plateau
+          - property: time
+            criteria: 1440 # maximum time in minutes
+        delay: 10 # delay period in minutes after the trigger
