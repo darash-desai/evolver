@@ -65,7 +65,7 @@ Below you will find an outline of the YAML specification for an experiment follo
 
 ## `experiment`
 
-This should be the root element for all protocol specifications.
+This should be the root element for all protocol specifications. <br />[[back to top]](#experiment)
 
 ## `experiment.vials`
 
@@ -75,7 +75,7 @@ Defines which vials the protocol will apply to. Vials not specified here will re
 - `{x}-{y}` - Protocol applies to vials `{x}` through `{y}`, inclusively.
 - `{a},{b},{d}...` - Protocol applies specifically to vials referenced in a comma-separated list
 
-The eVOLVER supports 16 vials that should be referenced using 1-based indexing (vial 1 is the first vial).
+The eVOLVER supports 16 vials that should be referenced using 1-based indexing (vial 1 is the first vial). <br />[[back to top]](#experiment)
 
 ### Examples
 
@@ -101,7 +101,7 @@ Each experiment is made up of one or more stages that are processed in sequence,
 - `name` - The name of the experiment
 - `end` - Object defining the termination condition(s) for the stage.
 
-Each stage will continue to run until the `end` condition(s) have been met. Once they have, the eVOLVER will proceed to the next stage in the experiment. Vials that complete an experiment earlier than others will go in to an ianctive state until the experiment has been completed for all vials. Inactive vials cannot be used to start other experiments.
+Each stage will continue to run until the `end` condition(s) have been met. Once they have, the eVOLVER will proceed to the next stage in the experiment. Vials that complete an experiment earlier than others will go in to an ianctive state until the experiment has been completed for all vials. Inactive vials cannot be used to start other experiments. <br />[[back to top]](#experiment)
 
 ### Example
 
@@ -127,11 +127,11 @@ experiment:
 
 ## `experiment.{stage}.name`
 
-Specifies the name of the stage.
+Specifies the name of the stage. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.end`
 
-Object specifying the end condition(s) for the stage for a given vial. End conditions are based on trigger objects, where multile triggers will be assessed as either an OR (default) or AND condition.
+Object specifying the end condition(s) for the stage for a given vial. End conditions are based on trigger objects, where multile triggers will be assessed as either an OR (default) or AND condition. <br />[[back to top]](#experiment)
 
 ### Example: End after Duration
 
@@ -189,7 +189,7 @@ experiment:
 
 ## `experiment.{stage}.end.triggers`
 
-The array of triggers to consider for the end condition. See #triggers for more information.
+The array of triggers to consider for the end condition. See #triggers for more information. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.end.mode`
 
@@ -198,7 +198,7 @@ Specifies whether multiple trigger conditions should be assessed as an AND condi
 - `and`
 - `or`
 
-If this property is not explicitely set, he default behavior for evaluating trigger conditions is OR.
+If this property is not explicitely set, he default behavior for evaluating trigger conditions is OR. <br />[[back to top]](#experiment)
 
 ### Example
 
@@ -221,11 +221,11 @@ experiment:
 
 ## `experiment.{stage}.end.delay`
 
-Scalar value that specifies a delay in minutes for terminating the stage once the `end` conditions have been met.
+Scalar value that specifies a delay in minutes for terminating the stage once the `end` conditions have been met. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.od`
 
-Scalar value to define the frequency that OD measurements for the vial should be recorded in readings/minute.
+Scalar value to define the frequency that OD measurements for the vial should be recorded in readings/minute. <br />[[back to top]](#experiment)
 
 ### Example
 
@@ -246,7 +246,7 @@ experiment:
 
 ## `experiment.{stage}.temperature`
 
-Specifies the temperature setpoint for the vial in degrees celcius. The eVOLVER employs a PID feedback control loop to reach this setpoint. This property can either take a scalar value or on object that specifies an array of triggers (see #triggers) and an optional default value for when the stage starts.
+Specifies the temperature setpoint for the vial in degrees celcius. The eVOLVER employs a PID feedback control loop to reach this setpoint. This property can either take a scalar value or on object that specifies an array of triggers (see #triggers) and an optional default value for when the stage starts. <br />[[back to top]](#experiment)
 
 ### Example: Constant scalar setpoint
 
@@ -266,15 +266,15 @@ experiment:
 
 ## `experiment.{stage}.temperature.default`
 
-Sets the default temperature for the start of the procedure.
+Sets the default temperature for the start of the procedure. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.temperature.triggers`
 
-The array of trigger objects for modulating the temperature. See #triggers for more information.
+The array of trigger objects for modulating the temperature. See #triggers for more information. <br />[[back to top]](#experiment)
 
 ## `experiment.{stage}.stir`
 
-Scalar value or on object that specifies an array of triggers (see #triggers) and an optional default value for when the stage starts. Valid values range from 0-10, inclusive. A value of 0 keeps the stir bar off.
+Scalar value or on object that specifies an array of triggers (see #triggers) and an optional default value for when the stage starts. Valid values range from 0-10, inclusive. A value of 0 keeps the stir bar off. <br />[[back to top]](#experiment)
 
 ### Example
 
@@ -351,7 +351,7 @@ The total volume the pump should dispense before turning off in mL. A value of `
 
 ## `experiment.{stage}.pump.triggers`
 
-The array of trigger objects for modulating the pump conditions. See #triggers for more information.<br />[[back to top]](#experiment)
+The array of trigger objects for modulating the pump conditions. See #triggers for more information. <br />[[back to top]](#experiment)
 
 ## Triggers
 
