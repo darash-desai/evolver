@@ -72,7 +72,6 @@ This should be the root element for all protocol specifications. <br />[[back to
 Defines which vials the protocol will apply to. Vials not specified here will remain uneffected and may be used concurrently to run other protocols. The value for this entry can be in one of the following formats:
 
 - `all` - Protocol applies to all vials
-- `{x}-{y}` - Protocol applies to vials `{x}` through `{y}`, inclusively.
 - `{a},{b},{d}...` - Protocol applies specifically to vials referenced in a comma-separated list
 
 The eVOLVER supports 16 vials that should be referenced using 1-based indexing (vial 1 is the first vial). <br />[[back to top]](#experiment)
@@ -82,11 +81,6 @@ The eVOLVER supports 16 vials that should be referenced using 1-based indexing (
 ```
 experiment:
   vials: all
-```
-
-```
-experiment:
-  vials: 4-7
 ```
 
 ```
